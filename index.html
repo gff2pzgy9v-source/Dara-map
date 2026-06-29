@@ -31,10 +31,10 @@
         /* Zvýraznění celého MGRS čtverce */
         #gridHighlight {
             position: absolute;
-            background-color: rgba(255, 59, 48, 0.35); /* Poloprůhledná červená */
+            background-color: rgba(255, 59, 48, 0.35);
             border: 2px solid rgba(255, 255, 255, 0.9);
             display: none;
-            pointer-events: none; /* Nebrání dalšímu klikání skrz */
+            pointer-events: none;
             box-sizing: border-box;
             box-shadow: 0 0 8px rgba(0,0,0,0.8);
         }
@@ -167,11 +167,13 @@
         let lastGridX = null;
         let lastGridY = null;
 
-        // Naše nejpřesnější kalibrace (odladěno pro osu X i Y)
-        const xMin = 329.06;
-        const xMax = 350.97;
-        const yMin = 630.87;
-        const yMax = 646.09;
+        // --- NOVÁ KOMPROMISNÍ KALIBRACE ---
+        // Zúžení osy X a roztažení osy Y pro kompenzaci zkreslení mapy
+        const xMin = 329.40;
+        const xMax = 350.60;
+        const yMin = 630.50;
+        const yMax = 646.40;
+        // ---------------------------------
 
         const natoAlphabet = {
             'A': 'Alpha', 'B': 'Bravo', 'C': 'Charlie', 'D': 'Delta', 'E': 'Echo',
@@ -182,7 +184,6 @@
             'Z': 'Zulu'
         };
 
-        // Načtení z paměti (Offline Cache)
         let savedKeyword = localStorage.getItem('ramrod_keyword') || 'BLACKHORSE';
         keywordInput.value = savedKeyword;
 
@@ -251,30 +252,25 @@
             const xPixel = event.clientX - rect.left;
             const yPixel = event.clientY - rect.top;
 
-            // Výpočet pozice z přesné kalibrace
             const valX = xMin + (xPixel / w) * (xMax - xMin);
             const valY = yMax - (yPixel / h) * (yMax - yMin);
             
-            // Určení čtverce zaokrouhlením dolů
             lastGridX = Math.floor(valX);
             lastGridY = Math.floor(valY);
 
-            // Výpočet rozměrů a pozice červeného zvýrazňovače (přepočet zpět na pixely)
             const boxW = w / (xMax - xMin);
             const boxH = h / (yMax - yMin);
             
             highlight.style.width = boxW + 'px';
             highlight.style.height = boxH + 'px';
             highlight.style.left = ((lastGridX - xMin) * boxW) + 'px';
-            highlight.style.top = ((yMax - (lastGridY + 1)) * boxH) + 'px'; // +1 protože Y roste odspoda
+            highlight.style.top = ((yMax - (lastGridY + 1)) * boxH) + 'px'; 
             highlight.style.display = 'block';
 
             updateDisplay();
         });
 
         keywordInput.addEventListener('input', updateDisplay);
-
-        // Validace rovnou po zapnutí aplikace
         validateAndSaveKeyword();
     </script>
 
