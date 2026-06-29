@@ -119,7 +119,7 @@
             color: #ffffff;
         }
         #ramrodCode {
-            color: #ff9500; /* Oranžové zvýraznění kódu */
+            color: #ff9500;
         }
         /* Box pro NATO relaci */
         .nato-phrase {
@@ -170,19 +170,17 @@
         const keywordInput = document.getElementById('ramrodKeyword');
         const keywordStatus = document.getElementById('keywordStatus');
         
-        // Globální proměnné pro uchování poslední pozice (pro okamžitý přepočet při změně klíče)
         let lastXRatio = null;
         let lastYRatio = null;
 
-        // --- ZDE JE UPRAVENÁ KALIBRACE ---
-        // X jsme zvedli o 0.3 doprava (na 328.8 a 351.8), Y zůstává stejné
-        const xMin = 328.8;
-        const xMax = 351.8;
-        const yMin = 631.5;
-        const yMax = 646.5;
+        // --- PŘESNÁ PIXELOVÁ KALIBRACE ---
+        // Vypočítáno na základě přesného poměru rozlišení obrázku a mřížky
+        const xMin = 329.06;
+        const xMax = 350.97;
+        const yMin = 631.37;
+        const yMax = 646.59;
         // ---------------------------------
 
-        // Slovník NATO fonetické abecedy
         const natoAlphabet = {
             'A': 'Alpha', 'B': 'Bravo', 'C': 'Charlie', 'D': 'Delta', 'E': 'Echo',
             'F': 'Foxtrot', 'G': 'Golf', 'H': 'Hotel', 'I': 'India', 'J': 'Juliet',
@@ -192,17 +190,14 @@
             'Z': 'Zulu'
         };
 
-        // Načtení uloženého klíče z paměti telefonu při startu (výchozí je BLACKHORSE)
         let savedKeyword = localStorage.getItem('ramrod_keyword') || 'BLACKHORSE';
         keywordInput.value = savedKeyword;
 
-        // Validace a uložení klíče
         function validateAndSaveKeyword() {
             let val = keywordInput.value.toUpperCase().replace(/[^A-Z]/g, '');
             keywordInput.value = val;
             
             let uniqueLetters = new Set(val);
-            // RAMROD vyžaduje přesně 10 unikátních písmen (pro číslice 0-9)
             if (val.length === 10 && uniqueLetters.size === 10) {
                 keywordStatus.textContent = "✔";
                 keywordStatus.className = "status-valid";
@@ -215,7 +210,6 @@
             }
         }
 
-        // Funkce pro samotné RAMROD šifrování trojmístné osy
         function encodeRAMROD(coordinateStr, keyword) {
             let result = "";
             for (let i = 0; i < coordinateStr.length; i++) {
@@ -225,23 +219,20 @@
             return result;
         }
 
-        // Převod šifry do NATO abecedy a formátování
         function toPhoneticPhrase(ramrodText) {
-            let parts = ramrodText.split(' '); // Rozdělí osu X a Y
+            let parts = ramrodText.split(' ');
             let phoneticParts = parts.map(part => {
                 return part.split('').map(char => natoAlphabet[char] || char).join('-');
             });
             return "Naše pozice: " + phoneticParts.join(', ');
         }
 
-        // Hlavní výpočet a aktualizace displeje
         function updateDisplay() {
             if (lastXRatio === null || lastYRatio === null) return;
             
             const currentX = xMin + lastXRatio * (xMax - xMin);
             const currentY = yMax - lastYRatio * (yMax - yMin);
             
-            // Určení čtverce (zaokrouhlení dolů dává správný jihozápadní roh čtverce)
             const gridX = Math.floor(currentX);
             const gridY = Math.floor(currentY);
             
@@ -265,7 +256,6 @@
             }
         }
 
-        // Sledování kliknutí na mapu
         mapImage.addEventListener('click', function(event) {
             const rect = mapImage.getBoundingClientRect();
             
@@ -275,7 +265,6 @@
             lastXRatio = xPixel / rect.width;
             lastYRatio = yPixel / rect.height;
 
-            // Přesun zaměřovače
             marker.style.left = xPixel + 'px';
             marker.style.top = yPixel + 'px';
             marker.style.display = 'block';
@@ -283,10 +272,8 @@
             updateDisplay();
         });
 
-        // Sledování změn v políčku pro klíčové slovo
         keywordInput.addEventListener('input', updateDisplay);
 
-        // Prvotní kontrola při načtení stránky
         validateAndSaveKeyword();
     </script>
 
