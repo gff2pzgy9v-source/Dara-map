@@ -167,12 +167,13 @@
         let lastGridX = null;
         let lastGridY = null;
 
-        // --- NOVÁ KOMPROMISNÍ KALIBRACE ---
-        // Zúžení osy X a roztažení osy Y pro kompenzaci zkreslení mapy
-        const xMin = 329.40;
-        const xMax = 350.60;
-        const yMin = 630.50;
-        const yMax = 646.40;
+        // --- ZDRCNUTÁ KALIBRACE ---
+        // Na základě screenů jsme mřížku matematicky zmenšili, 
+        // aby přesně lícovala s nakreslenými čarami uprostřed.
+        const xMin = 329.80;
+        const xMax = 350.20;
+        const yMin = 631.10;
+        const yMax = 645.90;
         // ---------------------------------
 
         const natoAlphabet = {
