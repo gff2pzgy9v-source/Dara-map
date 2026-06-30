@@ -28,7 +28,6 @@
             height: auto;
         }
         
-        /* Zvýraznění celého MGRS čtverce */
         #gridHighlight {
             position: absolute;
             background-color: rgba(255, 59, 48, 0.35);
@@ -167,12 +166,13 @@
         let lastGridX = null;
         let lastGridY = null;
 
-        // --- DOKONALÁ KALIBRACE (Díky oříznutí) ---
-        // Čistá celá čísla, přesně od kraje ke kraji
-        const xMin = 329.0;
-        const xMax = 351.0;
-        const yMin = 632.0;
-        const yMax = 646.0;
+        // --- MIKROMETRICKÁ OPRAVA ---
+        // Natažení souřadnic mírně za okraj (o 0.2), aby se vnitřní mřížka
+        // "roztáhla" a dosedla přesně na prostředek černých čar.
+        const xMin = 328.8;
+        const xMax = 351.2;
+        const yMin = 631.8;
+        const yMax = 646.2;
         // ---------------------------------
 
         const natoAlphabet = {
