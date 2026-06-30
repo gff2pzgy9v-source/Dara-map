@@ -3,130 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Dara Horizon - Taktický Šifrovat</title>
+    <title>Dara Horizon - Taktický Šifrovač</title>
     
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #121212;
-            color: #e0e0e0;
-            margin: 0;
-            padding: 0;
-            padding-bottom: 240px; 
-        }
-        .map-container {
-            position: relative;
-            display: inline-block;
-            width: 100%;
-        }
-        #mapImage {
-            display: block;
-            width: 100%;
-            height: auto;
-        }
-        
-        #gridHighlight {
-            position: absolute;
-            background-color: rgba(255, 59, 48, 0.35);
-            border: 2px solid rgba(255, 255, 255, 0.9);
-            display: none;
-            pointer-events: none;
-            box-sizing: border-box;
-            box-shadow: 0 0 8px rgba(0,0,0,0.8);
-        }
-
-        .info-panel {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: rgba(28, 28, 30, 0.94);
-            box-shadow: 0 -4px 12px rgba(0,0,0,0.6);
-            z-index: 1000;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
-            box-sizing: border-box;
-        }
-        .keyword-container {
-            display: flex;
-            align-items: center;
-            background-color: rgba(44, 44, 46, 0.6);
-            padding: 8px 12px;
-            border-radius: 10px;
-            margin-bottom: 12px;
-        }
-        .keyword-container label {
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: #aeaeb2;
-            margin-right: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .keyword-container input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: #ffffff;
-            font-size: 1.1rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            outline: none;
-            padding: 0;
-        }
-        #keywordStatus {
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #121212; color: #e0e0e0; margin: 0; padding-bottom: 240px; }
+        .map-container { position: relative; display: inline-block; width: 100%; }
+        #mapImage { display: block; width: 100%; height: auto; }
+        #gridHighlight { position: absolute; background-color: rgba(255, 59, 48, 0.35); border: 2px solid rgba(255, 255, 255, 0.9); display: none; pointer-events: none; box-sizing: border-box; box-shadow: 0 0 8px rgba(0,0,0,0.8); }
+        .info-panel { position: fixed; bottom: 0; left: 0; width: 100%; background-color: rgba(28, 28, 30, 0.94); padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); box-sizing: border-box; z-index: 1000; backdrop-filter: blur(20px); }
+        .keyword-container { display: flex; align-items: center; background-color: rgba(44, 44, 46, 0.6); padding: 8px 12px; border-radius: 10px; margin-bottom: 12px; }
+        .keyword-container label { font-size: 0.8rem; font-weight: 600; color: #aeaeb2; margin-right: 10px; text-transform: uppercase; }
+        .keyword-container input { flex: 1; background: transparent; border: none; color: #ffffff; font-size: 1.1rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; outline: none; }
+        #keywordStatus { font-size: 0.8rem; font-weight: bold; }
         .status-valid { color: #34c759; }
         .status-invalid { color: #ff3b30; }
-        
-        .results-grid {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-        .result-box {
-            flex: 1;
-            background-color: rgba(44, 44, 46, 0.8);
-            padding: 10px;
-            border-radius: 10px;
-            text-align: center;
-        }
-        .result-box .label {
-            display: block;
-            font-size: 0.7rem;
-            font-weight: 600;
-            color: #aeaeb2;
-            margin-bottom: 4px;
-            letter-spacing: 0.5px;
-        }
-        .result-box .val {
-            font-size: 1.3rem;
-            font-weight: 700;
-            letter-spacing: 1px;
-            color: #ffffff;
-        }
-        #ramrodCode {
-            color: #ff9500;
-        }
-        .nato-phrase {
-            background-color: rgba(58, 58, 60, 0.5);
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #ffffff;
-            text-align: center;
-            border-left: 4px solid #ff9500;
-            min-height: 20px;
-            word-break: break-word;
-        }
+        .results-grid { display: flex; gap: 12px; margin-bottom: 12px; }
+        .result-box { flex: 1; background-color: rgba(44, 44, 46, 0.8); padding: 10px; border-radius: 10px; text-align: center; }
+        .result-box .label { display: block; font-size: 0.7rem; font-weight: 600; color: #aeaeb2; margin-bottom: 4px; }
+        .result-box .val { font-size: 1.3rem; font-weight: 700; color: #ffffff; }
+        #ramrodCode { color: #ff9500; }
+        .nato-phrase { background-color: rgba(58, 58, 60, 0.5); padding: 12px; border-radius: 10px; font-size: 0.95rem; font-weight: 600; color: #ffffff; text-align: center; border-left: 4px solid #ff9500; }
     </style>
 </head>
 <body>
@@ -142,18 +40,16 @@
             <input type="text" id="ramrodKeyword" maxlength="10" placeholder="BLACKHORSE" autocomplete="off" autocapitalize="characters">
             <span id="keywordStatus" class="status-valid">✔</span>
         </div>
-        
         <div class="results-grid">
             <div class="result-box">
                 <span class="label">SOUŘADNICE (100m)</span>
-                <span id="rawCoords">--- ---</span>
+                <span id="rawCoords" class="val">--- ---</span>
             </div>
             <div class="result-box">
                 <span class="label">RAMROD ŠIFRA</span>
-                <span id="ramrodCode">--- ---</span>
+                <span id="ramrodCode" class="val">--- ---</span>
             </div>
         </div>
-        
         <div id="natoCallout" class="nato-phrase">Kliknutím do mapy určíte pozici...</div>
     </div>
 
@@ -166,22 +62,13 @@
         let lastGridX = null;
         let lastGridY = null;
 
-        // --- SPRÁVNÁ MIKROMETRICKÁ OPRAVA ---
-        // Zohledňuje šířku tiskové čáry na okraji tvého dokonalého ořezu
-        const xMin = 329.02;
-        const xMax = 350.98;
-        const yMin = 632.02;
-        const yMax = 645.98;
-        // ---------------------------------
+        // --- KALIBRACE PRO OŘÍZNUTÝ OBRÁZEK ---
+        const xMin = 329.0;
+        const xMax = 351.0;
+        const yMin = 632.0;
+        const yMax = 646.0;
 
-        const natoAlphabet = {
-            'A': 'Alpha', 'B': 'Bravo', 'C': 'Charlie', 'D': 'Delta', 'E': 'Echo',
-            'F': 'Foxtrot', 'G': 'Golf', 'H': 'Hotel', 'I': 'India', 'J': 'Juliet',
-            'K': 'Kilo', 'L': 'Lima', 'M': 'Mike', 'N': 'November', 'O': 'Oscar',
-            'P': 'Papa', 'Q': 'Quebec', 'R': 'Romeo', 'S': 'Sierra', 'T': 'Tango',
-            'U': 'Uniform', 'V': 'Victor', 'W': 'Whiskey', 'X': 'X-Ray', 'Y': 'Yankee',
-            'Z': 'Zulu'
-        };
+        const natoAlphabet = { 'A': 'Alpha', 'B': 'Bravo', 'C': 'Charlie', 'D': 'Delta', 'E': 'Echo', 'F': 'Foxtrot', 'G': 'Golf', 'H': 'Hotel', 'I': 'India', 'J': 'Juliet', 'K': 'Kilo', 'L': 'Lima', 'M': 'Mike', 'N': 'November', 'O': 'Oscar', 'P': 'Papa', 'Q': 'Quebec', 'R': 'Romeo', 'S': 'Sierra', 'T': 'Tango', 'U': 'Uniform', 'V': 'Victor', 'W': 'Whiskey', 'X': 'X-Ray', 'Y': 'Yankee', 'Z': 'Zulu' };
 
         let savedKeyword = localStorage.getItem('ramrod_keyword') || 'BLACKHORSE';
         keywordInput.value = savedKeyword;
@@ -189,89 +76,55 @@
         function validateAndSaveKeyword() {
             let val = keywordInput.value.toUpperCase().replace(/[^A-Z]/g, '');
             keywordInput.value = val;
-            
             let uniqueLetters = new Set(val);
             if (val.length === 10 && uniqueLetters.size === 10) {
-                keywordStatus.textContent = "✔";
-                keywordStatus.className = "status-valid";
+                keywordStatus.textContent = "✔"; keywordStatus.className = "status-valid";
                 localStorage.setItem('ramrod_keyword', val);
                 return val;
             } else {
-                keywordStatus.textContent = "⚠ Musí mít 10 unikátních písmen";
-                keywordStatus.className = "status-invalid";
+                keywordStatus.textContent = "⚠ Musí mít 10 unikátních písmen"; keywordStatus.className = "status-invalid";
                 return null;
             }
         }
 
-        function encodeRAMROD(coordinateStr, keyword) {
-            let result = "";
-            for (let i = 0; i < coordinateStr.length; i++) {
-                let digit = parseInt(coordinateStr[i]);
-                result += keyword[digit];
-            }
-            return result;
+        function encodeRAMROD(str, keyword) {
+            return str.split('').map(d => keyword[parseInt(d)]).join('');
         }
 
         function toPhoneticPhrase(ramrodText) {
             let parts = ramrodText.split(' ');
-            let phoneticParts = parts.map(part => {
-                return part.split('').map(char => natoAlphabet[char] || char).join('-');
-            });
-            return "Naše pozice: " + phoneticParts.join(', ');
+            return "Naše pozice: " + parts.map(part => part.split('').map(char => natoAlphabet[char] || char).join('-')).join(', ');
         }
 
         function updateDisplay() {
             if (lastGridX === null || lastGridY === null) return;
-            
             const strX = String(lastGridX).padStart(3, '0');
             const strY = String(lastGridY).padStart(3, '0');
-            
             document.getElementById('rawCoords').textContent = `${strX} ${strY}`;
-            
             const activeKeyword = validateAndSaveKeyword();
-            
             if (activeKeyword) {
-                const codeX = encodeRAMROD(strX, activeKeyword);
-                const codeY = encodeRAMROD(strY, activeKeyword);
-                const fullCode = `${codeX} ${codeY}`;
-                
-                document.getElementById('ramrodCode').textContent = fullCode;
-                document.getElementById('natoCallout').textContent = toPhoneticPhrase(fullCode);
-            } else {
-                document.getElementById('ramrodCode').textContent = "--- ---";
-                document.getElementById('natoCallout').textContent = "Zadejte platný 10místný RAMROD klíč!";
+                const code = `${encodeRAMROD(strX, activeKeyword)} ${encodeRAMROD(strY, activeKeyword)}`;
+                document.getElementById('ramrodCode').textContent = code;
+                document.getElementById('natoCallout').textContent = toPhoneticPhrase(code);
             }
         }
 
-        mapImage.addEventListener('click', function(event) {
+        mapImage.addEventListener('click', function(e) {
             const rect = mapImage.getBoundingClientRect();
-            const w = rect.width;
-            const h = rect.height;
-            
-            const xPixel = event.clientX - rect.left;
-            const yPixel = event.clientY - rect.top;
-
-            const valX = xMin + (xPixel / w) * (xMax - xMin);
-            const valY = yMax - (yPixel / h) * (yMax - yMin);
-            
-            lastGridX = Math.floor(valX);
-            lastGridY = Math.floor(valY);
-
-            const boxW = w / (xMax - xMin);
-            const boxH = h / (yMax - yMin);
-            
-            highlight.style.width = boxW + 'px';
-            highlight.style.height = boxH + 'px';
+            const w = rect.width, h = rect.height;
+            const x = e.clientX - rect.left, y = e.clientY - rect.top;
+            lastGridX = Math.floor(xMin + (x / w) * (xMax - xMin));
+            lastGridY = Math.floor(yMax - (y / h) * (yMax - yMin));
+            const boxW = w / (xMax - xMin), boxH = h / (yMax - yMin);
+            highlight.style.width = boxW + 'px'; highlight.style.height = boxH + 'px';
             highlight.style.left = ((lastGridX - xMin) * boxW) + 'px';
-            highlight.style.top = ((yMax - (lastGridY + 1)) * boxH) + 'px'; 
+            highlight.style.top = ((yMax - (lastGridY + 1)) * boxH) + 'px';
             highlight.style.display = 'block';
-
             updateDisplay();
         });
 
         keywordInput.addEventListener('input', updateDisplay);
         validateAndSaveKeyword();
     </script>
-
 </body>
 </html>
