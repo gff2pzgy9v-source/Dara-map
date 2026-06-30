@@ -166,13 +166,12 @@
         let lastGridX = null;
         let lastGridY = null;
 
-        // --- MIKROMETRICKÁ OPRAVA ---
-        // Natažení souřadnic mírně za okraj (o 0.2), aby se vnitřní mřížka
-        // "roztáhla" a dosedla přesně na prostředek černých čar.
-        const xMin = 328.8;
-        const xMax = 351.2;
-        const yMin = 631.8;
-        const yMax = 646.2;
+        // --- SPRÁVNÁ MIKROMETRICKÁ OPRAVA ---
+        // Zohledňuje šířku tiskové čáry na okraji tvého dokonalého ořezu
+        const xMin = 329.02;
+        const xMax = 350.98;
+        const yMin = 632.02;
+        const yMax = 645.98;
         // ---------------------------------
 
         const natoAlphabet = {
